@@ -1,12 +1,12 @@
 ﻿#include "file_management.h"
 using namespace std;
-#define FileNguoiThue "Lessee.txt"
+#define FileNguoiThue "resource file/Lessee.txt"
 
 
 struct NguoiThue {
 	long long CCCD;
 	string Name;
-	int age;
+	int age;	
 	int IDPhong; // IDPhong là mã số phòng mà người thuê đang ở
 	double TienCoc; // tiền cọc
 };
