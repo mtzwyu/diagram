@@ -137,7 +137,7 @@ RootNguoiThue* DeleteNode(RootNguoiThue* root, long long CCCD) {
 void DeleteDataInFile(long long CCCD) {
 	ifstream file(FileNguoiThue);
 	ofstream tempFile("temp.txt");
-	ofstream file1("old_lessee.txt");
+	ofstream file1("resouce files\old_lessee.txt");
 	NguoiThue nguoiThue;
 	while (file >> nguoiThue.CCCD) {
 		file.ignore();
