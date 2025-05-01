@@ -133,12 +133,6 @@
     <ClCompile Include="PhongTro.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Bill.txt" />
-    <Text Include="Lessee.txt" />
-    <Text Include="old_lessee.txt" />
-    <Text Include="Room.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="file_management.h" />
     <ClInclude Include="NguoiThue.h" />
   </ItemGroup>
