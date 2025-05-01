@@ -25,23 +25,7 @@ RootNguoiThue* CreateNode(NguoiThue nguoiThue) {
     return newNode;
 }
 
-// Hàm này sẽ ghi thông tin người thuê mới vào file 
-void newLESSEE(NguoiThue nguoiThue) {
-    ofstream file = ghifile(FileNguoiThue);
-    cout << "Nhap CCCD: ";
-    cin >> nguoiThue.CCCD;
-    cin.ignore();
-    cout << "Nhap Ho Ten: ";
-    getline(cin, nguoiThue.Name);
-    cout << "Nhap Tuoi: ";
-    cin >> nguoiThue.age;
-    cout << "Nhap IDPhong: ";
-    cin >> nguoiThue.IDPhong;
-    cout << "Nhap Tien Coc: ";
-    cin >> nguoiThue.TienCoc;
-    file << nguoiThue.CCCD << "|" << nguoiThue.Name << "|" << nguoiThue.age << "|" << nguoiThue.IDPhong << "|" << nguoiThue.TienCoc << endl;
-    file.close();
-}
+
 
 
 
@@ -61,7 +45,7 @@ RootNguoiThue* InsertNode(RootNguoiThue* root, NguoiThue nguoiThue) {
 	}
     return root;
 }
-// Hàm này sẽ đọc danh sách người thuê từ file và thêm vào cây nhị phân
+// Hàm này sẽ đọc danh sách người thuê từ file và thêm vào cây 
 RootNguoiThue* ThemDanhSachNguoiThuetufile() {
 	ifstream file = chidocfile(FileNguoiThue);
 	NguoiThue nguoiThue;
@@ -78,6 +62,25 @@ RootNguoiThue* ThemDanhSachNguoiThuetufile() {
 	}
 	file.close();
 	return root;
+}
+
+// Hàm này sẽ ghi thông tin người thuê mới vào file 
+void newLESSEE(RootNguoiThue *&root,NguoiThue nguoiThue) {
+	ofstream file = ghifile(FileNguoiThue);
+	cout << "Nhap CCCD: ";
+	cin >> nguoiThue.CCCD;
+	cin.ignore();
+	cout << "Nhap Ho Ten: ";
+	getline(cin, nguoiThue.Name);
+	cout << "Nhap Tuoi: ";
+	cin >> nguoiThue.age;
+	cout << "Nhap IDPhong: ";
+	cin >> nguoiThue.IDPhong;
+	cout << "Nhap Tien Coc: ";
+	cin >> nguoiThue.TienCoc;
+	file << nguoiThue.CCCD << "|" << nguoiThue.Name << "|" << nguoiThue.age << "|" << nguoiThue.IDPhong << "|" << nguoiThue.TienCoc << endl;
+	InsertNode(root, nguoiThue);
+	file.close();
 }
 
 // Hàm này sẽ duyệt cây nhị phân theo thứ tự InOrder và in ra thông tin người thuê
@@ -181,7 +184,7 @@ void MenuforLessee() {
 	case 1: {
 		system("cls");
 		NguoiThue nguoiThue;
-		newLESSEE(nguoiThue);
+		newLESSEE(root,nguoiThue);
 		break;
 	}
 	case 2: {

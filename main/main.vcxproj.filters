@@ -30,12 +30,18 @@
     <ClCompile Include="PhongTro.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Hoadon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="file_management.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="NguoiThue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Phongtro.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
