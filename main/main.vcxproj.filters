@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Resource Files\Resoure files">
+      <UniqueIdentifier>{4a8440ec-fa7f-4c56-b317-39f3bb6d1bbe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -24,19 +27,22 @@
     <ClCompile Include="file_management.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PhongTro.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Lessee.txt">
-      <Filter>Resource Files</Filter>
+    <Text Include="Room.txt">
+      <Filter>Resource Files\Resoure files</Filter>
     </Text>
     <Text Include="Bill.txt">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Resoure files</Filter>
     </Text>
-    <Text Include="Room.txt">
-      <Filter>Resource Files</Filter>
+    <Text Include="Lessee.txt">
+      <Filter>Resource Files\Resoure files</Filter>
     </Text>
     <Text Include="old_lessee.txt">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Resoure files</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>
