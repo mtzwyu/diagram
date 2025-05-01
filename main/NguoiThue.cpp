@@ -1,6 +1,6 @@
 ﻿#include "file_management.h"
 using namespace std;
-#define FileNguoiThue "Lessee.txt"
+#define FileNguoiThue "Resource FIles/Lessee.txt"
 
 
 struct NguoiThue {
