@@ -112,7 +112,6 @@ void newLESSEE(RootNguoiThue *&root,NguoiThue nguoiThue) {
 	cin.ignore();
 	cout << "Nhap Ho Ten: ";
 	getline(cin, nguoiThue.Name);
-	cin.ignore();
 	cout << "Nhap Tuoi: ";
 	cin >> nguoiThue.age;
 	cout << "Nhap IDPhong: ";
@@ -125,7 +124,7 @@ void newLESSEE(RootNguoiThue *&root,NguoiThue nguoiThue) {
     nguoiThue.NgayThue = to_string(ltm.tm_mday) + "/" + to_string(1 + ltm.tm_mon) + "/" + to_string(1900 + ltm.tm_year);
 	cout << "Nhap Tien Coc: ";
 	cin >> nguoiThue.TienCoc;
-	file << nguoiThue.maKhachHang << "|" << nguoiThue.CCCD << "|" << nguoiThue.Name << "|" << nguoiThue.age << "|" << nguoiThue.IDPhong << "|" << "0" << nguoiThue.SDT << "|" << nguoiThue.NgayThue << "|" << nguoiThue.TienCoc << endl;
+	file << nguoiThue.maKhachHang << "|" << nguoiThue.CCCD << "|" << nguoiThue.Name << "|" << nguoiThue.age << "|" << nguoiThue.IDPhong << "|" << "0" + to_string(nguoiThue.SDT) << "|" << nguoiThue.NgayThue << "|" << nguoiThue.TienCoc << endl;
 	InsertNode(root, nguoiThue);
 	file.close();
 }
@@ -217,7 +216,12 @@ void DeleteDataInFile(long long Makhachhang) {
 	rename("temp.txt", FileNguoiThue);
 }
 
-// Hàm Menu
+
+
+
+
+
+// Hàm Menu cua Lessee
 void MenuforLessee() {
 LOOP:
 	RootNguoiThue* root = ThemDanhSachNguoiThuetufile();

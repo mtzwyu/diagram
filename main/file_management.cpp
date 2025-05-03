@@ -6,7 +6,7 @@
 #include <cstdlib>
 #include <format> 
 #include <sstream>
-
+#include <vector>
 using namespace std;
 
 

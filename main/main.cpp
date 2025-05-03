@@ -5,6 +5,6 @@
 
 using namespace std;
 int main() {
-	MenuforLessee();
+	MenucuaRoom();
 	return 0;
 }

@@ -1,5 +1,6 @@
-#include "file_management.h"
+﻿#include "file_management.h"
 #include "NguoiThue.h"
+
 using namespace std;
 #define Filephongtro "Resource FIles/Room.txt"
 
@@ -26,13 +27,16 @@ rootPhongtro* CreateNodePt(Phongtro Phongtro) {
 }
 
 rootPhongtro* InsertNodePt(rootPhongtro* root, Phongtro Phongtro) {
+	int id = stoi(Phongtro.IDPhong.substr(2));
+	
 	if (root == nullptr) {
 		return CreateNodePt(Phongtro);
 	}
-	if (Phongtro.IDPhong < root->data.IDPhong) {
+	int idroot = stoi(root->data.IDPhong.substr(2));
+    if (id < idroot) {
 		root->Left = InsertNodePt(root->Left, Phongtro);
 	}
-	else if (Phongtro.IDPhong > root->data.IDPhong) {
+	else if (id > idroot) {
 		root->Right = InsertNodePt(root->Right, Phongtro);
 	}
 	else {
@@ -41,7 +45,7 @@ rootPhongtro* InsertNodePt(rootPhongtro* root, Phongtro Phongtro) {
 	return root;
 }
 
-// doc file vao c�y
+// doc file vao cây
 rootPhongtro* docfilevaotreePt() {
 	ifstream file(Filephongtro);
 	rootPhongtro* root = nullptr;
@@ -92,15 +96,18 @@ void ThemPhongMoichokhachInFile(rootPhongtro *&root,string Id) {
 
 
 
-// Them Thong tin phong chua co trong danh s�ch
+// Them Thong tin phong chua co trong danh sách
 void ThemPhongchuaco(rootPhongtro*& root) {
 	Phongtro Phongtro;
 	ofstream file = ghifile(Filephongtro);
+	cin.ignore();
 	cout << "Nhap id Phong: ";
-	getline(cin, Phongtro.IDPhong);
+	string s = "";
+	cin >> s;
+	Phongtro.IDPhong = "id" + s;
 	cout << "Nhap gia Phong: ";
 	cin >> Phongtro.GiaThue;
-	file << "id" + Phongtro.IDPhong << "|" << "0" << "|" << "" << "|" << Phongtro.GiaThue;
+	file << Phongtro.IDPhong << "|" << "0" << "|" << "              " << "|" << Phongtro.GiaThue << endl;
 	InsertNodePt(root, Phongtro);
 	file.close();
 }
@@ -163,28 +170,67 @@ rootPhongtro* SearchNodePt(rootPhongtro* root, string ID) {
 	return SearchNodePt(root->Right, ID);
 }
 
+//Cho biết thông tin các Phòng thuê có số người thuê đông nhất(nhiều người ở cùng phòng nhất).
+// duyet vao multimap de tim kiem de hon
+void dvmap(rootPhongtro* root, multimap<string, Phongtro> &mtp) {
+	if (root != nullptr) {
+		dvmap(root->Left, mtp);
+		mtp.insert(make_pair(root->data.SonguoiO, root->data));
+		dvmap(root->Right, mtp);
+	}
+}
+
+// Tìm kiếm Phong tro dong nhat
+void Timkiemmax(rootPhongtro *root) {
+    multimap<string, Phongtro> mtp; 
+    dvmap(root, mtp);
+    if (!mtp.empty()) {
+		auto max = mtp.rbegin()->first;
+		cout << "ID Phong\t\tSo Nguoi O\t\tNgay Thue\t\tGia Thue" << endl;
+		for (auto it = mtp.rbegin(); it != mtp.rend(); it++) {
+			if (max == it->first) {
+				cout << it->second.IDPhong << "\t\t\t" << it->second.SonguoiO << "\t\t\t" << it->second.NgayPhongdcthue << "\t\t" << it->second.GiaThue << " dong" << endl;
+			}
+			else {
+				break;
+			}
+		}
+       
+		
+        
+    } else {
+        cout << "Khong co phong tro nao trong danh sach." << endl;
+    }
+}
+
+
+
 
 
 void MenucuaRoom() {
 LOOP:
-	rootPhongtro* root = docfilevaotreePt();
+	rootPhongtro* root = NULL;
+	root = docfilevaotreePt();
 
 	cout << "====================QUAN LY PHONG TRO====================" << endl;
 	cout << "- 1. Them phong tro moi" << endl;
 	cout << "- 2. Xoa phong tro" << endl;
 	cout << "- 3. Tim kiem phong tro" << endl;
 	cout << "- 4. Hien thi danh sach tat ca phong tro" << endl;
-	cout << "- 5. Thoat" << endl;
+	cout << "- 5. Hien thi cac phong tro co so nguoi o dong nhat" << endl;
+	cout << "- 6. Thoat" << endl;
 	cout << "- Nhap lua chon: ";
 	int choice;
 	cin >> choice;
 	switch (choice) {
 	case 1: {
+		system("cls");
 		int chon;
 		cout << "1. Them thong tin phong tro moi (khong nam trong file truoc day)" << endl;
 		cout << "2. Them phong tin phong tro cho khach hang toi thue" << endl;
 		cout << "Lua chon: ";
 		cin >> chon;
+		system("cls");
 		if (chon == 1) {
 			ThemPhongchuaco(root);
 		}
@@ -235,8 +281,12 @@ LOOP:
 		cout << "---------------------------------- Danh Sach Phong Tro ----------------------------------\n";
 		HienThiDanhSachPhongTro(root);
 		break;
-	}
-	case 5: {
+	}case 5: {
+		system("cls");
+		cout << "---------------------------------- Danh Sach Phong Tro ----------------------------------\n";
+		Timkiemmax(root);
+		break;
+	}case 6: {
 		cout << "Cam on ban da su dung phan mem!" << endl;
 		break;
 	}
