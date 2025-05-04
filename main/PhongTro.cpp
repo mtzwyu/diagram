@@ -1,6 +1,6 @@
 ﻿#include "file_management.h"
 #include "NguoiThue.h"
-
+#include "Hoadon.h"
 using namespace std;
 #define Filephongtro "Resource FIles/Room.txt"
 
@@ -27,19 +27,16 @@ rootPhongtro* CreateNodePt(Phongtro Phongtro) {
 }
 
 rootPhongtro* InsertNodePt(rootPhongtro* root, Phongtro Phongtro) {
-	int id = stoi(Phongtro.IDPhong.substr(2));
-	
 	if (root == nullptr) {
 		return CreateNodePt(Phongtro);
 	}
-	int idroot = stoi(root->data.IDPhong.substr(2));
-    if (id < idroot) {
+	int newID = stoi(Phongtro.IDPhong.substr(2));
+	int currentID = stoi(root->data.IDPhong.substr(2));
+	if (newID < currentID) {
 		root->Left = InsertNodePt(root->Left, Phongtro);
-	}
-	else if (id > idroot) {
+	} else if (newID > currentID) {
 		root->Right = InsertNodePt(root->Right, Phongtro);
-	}
-	else {
+	} else {
 		cout << "Phong da ton tai!" << endl;
 	}
 	return root;
@@ -47,16 +44,20 @@ rootPhongtro* InsertNodePt(rootPhongtro* root, Phongtro Phongtro) {
 
 // doc file vao cây
 rootPhongtro* docfilevaotreePt() {
-	ifstream file(Filephongtro);
+	ifstream file = chidocfile(Filephongtro);
 	rootPhongtro* root = nullptr;
 	Phongtro Phongtro;
-    while (getline(file, Phongtro.IDPhong, '|')) {
-    getline(file, Phongtro.SonguoiO, '|');  
-    getline(file, Phongtro.NgayPhongdcthue, '|'); 
-    file >> Phongtro.GiaThue;
-    file.ignore(); 
-    root = InsertNodePt(root, Phongtro);
-    }
+	while (getline(file, Phongtro.IDPhong, '|')) {
+		getline(file, Phongtro.SonguoiO, '|');
+		getline(file, Phongtro.NgayPhongdcthue, '|');
+		if (!(file >> Phongtro.GiaThue)) {
+			cout << "Error: Invalid data format in file." << endl;
+			break;
+		}
+		file.ignore(numeric_limits<streamsize>::max(), '\n');
+		root = InsertNodePt(root, Phongtro);
+	}
+
 	file.close();
 	return root;
 }
@@ -67,34 +68,37 @@ void cntphongtrong(rootPhongtro* root, int &cnt) {
 	if (root != nullptr) {
 		cntphongtrong(root->Left, cnt);
 		if (root->data.SonguoiO == "0") {
-			cout << root->data.IDPhong << "\t\t" << root->data.SonguoiO << "\t\t\t" << root->data.NgayPhongdcthue << "\t\t\t" << root->data.GiaThue << " dong" << endl;
+			cout << root->data.IDPhong << "\t\t\t" << root->data.SonguoiO << "\t\t\t" << root->data.NgayPhongdcthue << "\t\t\t" << root->data.GiaThue << " dong" << endl;
 			cnt++;
 		}
 		cntphongtrong(root->Right, cnt);
 	}
 }
 //Them Phong cho khach theo ID
-void ThemPhongMoichokhachInFile(rootPhongtro *&root,string Id) {
-	Id = "id" + Id;
-	removeLineFromFile(Filephongtro, Id);
-	ofstream file = ghifile(Filephongtro);
-	Phongtro Phongtro;
-	cout << "Nhap id Phong: ";
-	cin >> Phongtro.IDPhong;
-	cout << "Nhap so luong khach o: ";
-	cin >> Phongtro.SonguoiO;
-	time_t now = time(0);
-	tm ltm;
-	localtime_s(&ltm, &now);
-	Phongtro.NgayPhongdcthue = to_string(ltm.tm_mday) + "/" + to_string(1 + ltm.tm_mon) + "/" + to_string(1900 + ltm.tm_year);
-	cout << "Nhap Gia Thue: ";
-	cin >> Phongtro.GiaThue;
-	file  << "id" << Phongtro.IDPhong << "|" << Phongtro.SonguoiO << "|" << Phongtro.NgayPhongdcthue << "|" << Phongtro.GiaThue;
-	InsertNodePt(root, Phongtro);
-	file.close();
+void ThemPhongMoichokhachInFile(rootPhongtro *&root, string Id) {
+    removeLineFromFile(Filephongtro, "id" + Id);
+    ofstream file(Filephongtro, ios::app);
+    if (!file.is_open()) {
+        cout << "Error: Unable to open file for writing." << endl;
+        return;
+    }
+    Phongtro Phongtro;
+    Phongtro.IDPhong = "id" + Id;
+    cout << "Nhap so luong khach o: ";
+    cin >> Phongtro.SonguoiO;
+    cin.ignore();
+    time_t now = time(0);
+    tm ltm;
+    localtime_s(&ltm, &now);
+    Phongtro.NgayPhongdcthue = to_string(ltm.tm_mday) + "/" + to_string(1 + ltm.tm_mon) + "/" + to_string(1900 + ltm.tm_year);
+    cout << "Nhap Gia Thue: ";
+    cin >> Phongtro.GiaThue;
+    file << Phongtro.IDPhong << "|" << Phongtro.SonguoiO << "|" << Phongtro.NgayPhongdcthue << "|" << Phongtro.GiaThue << endl;
+    root = InsertNodePt(root, Phongtro);
+    file.close();
 }
 
-
+rootPhongtro* SearchNodePt(rootPhongtro*, string);
 
 // Them Thong tin phong chua co trong danh sách
 void ThemPhongchuaco(rootPhongtro*& root) {
@@ -104,15 +108,17 @@ void ThemPhongchuaco(rootPhongtro*& root) {
 	cout << "Nhap id Phong: ";
 	string s = "";
 	cin >> s;
+	if (SearchNodePt(root, s) != NULL) {
+		cout << "Phong Da Ton Tai!\n";
+		return;
+	}
 	Phongtro.IDPhong = "id" + s;
 	cout << "Nhap gia Phong: ";
 	cin >> Phongtro.GiaThue;
-	file << Phongtro.IDPhong << "|" << "0" << "|" << "              " << "|" << Phongtro.GiaThue << endl;
+	file << Phongtro.IDPhong << "|" << "0" << "|" << "        " << "|" << Phongtro.GiaThue << endl;
 	InsertNodePt(root, Phongtro);
 	file.close();
 }
-
-
 
 
 void InOrderPt(rootPhongtro* root) {
@@ -129,23 +135,19 @@ void HienThiDanhSachPhongTro(rootPhongtro* root) {
 }
 // xoa phong tro theo Id
 rootPhongtro* DeleteNodePt(rootPhongtro* root, string id) {
-	id = "id" + id;
 	if (root == nullptr) {
 		return root;
 	}
-	if (id < root->data.IDPhong) {
+	if (stoi(id.substr(2)) < stoi(root->data.IDPhong.substr(2))) {
 		root->Left = DeleteNodePt(root->Left, id);
-	}
-	else if (id > root->data.IDPhong) {
+	} else if (stoi(id.substr(2)) > stoi(root->data.IDPhong.substr(2))) {
 		root->Right = DeleteNodePt(root->Right, id);
-	}
-	else {
+	} else {
 		if (root->Left == nullptr) {
 			rootPhongtro* temp = root->Right;
 			delete root;
 			return temp;
-		}
-		else if (root->Right == nullptr) {
+		} else if (root->Right == nullptr) {
 			rootPhongtro* temp = root->Left;
 			delete root;
 			return temp;
@@ -160,11 +162,13 @@ rootPhongtro* DeleteNodePt(rootPhongtro* root, string id) {
 	return root;
 }
 // tim kiem phong tro theo Id phong
-rootPhongtro* SearchNodePt(rootPhongtro* root, string ID) {
-	if (root == nullptr || root->data.IDPhong == ID) {
+rootPhongtro* SearchNodePt(rootPhongtro* root, string ID) 
+{	
+	int Id = stoi(ID);
+	if (root == nullptr || stoi(root->data.IDPhong.substr(2)) == Id) {
 		return root;
 	}
-	if (ID < root->data.IDPhong) {
+	if (Id < stoi(root->data.IDPhong.substr(2))) {
 		return SearchNodePt(root->Left, ID);
 	}
 	return SearchNodePt(root->Right, ID);
@@ -204,10 +208,26 @@ void Timkiemmax(rootPhongtro *root) {
 }
 
 
+// find theo Ma Khach hang
+
+
+
+long long timgiaGiaThue(string Id) {
+	rootPhongtro* root = docfilevaotreePt();
+	rootPhongtro* p = SearchNodePt(root, Id);  
+	if (p == NULL) {
+		cout << "Khong tim thay\n";
+		return -1;
+	}
+	return p->data.GiaThue;
+}
+
+
 
 
 
 void MenucuaRoom() {
+	
 LOOP:
 	rootPhongtro* root = NULL;
 	root = docfilevaotreePt();
@@ -218,7 +238,7 @@ LOOP:
 	cout << "- 3. Tim kiem phong tro" << endl;
 	cout << "- 4. Hien thi danh sach tat ca phong tro" << endl;
 	cout << "- 5. Hien thi cac phong tro co so nguoi o dong nhat" << endl;
-	cout << "- 6. Thoat" << endl;
+	cout << "- 6. Quay Lai" << endl;
 	cout << "- Nhap lua chon: ";
 	int choice;
 	cin >> choice;
@@ -239,11 +259,12 @@ LOOP:
 			cout << "ID Phong\t\tSo Nguoi O\t\tNgay Thue\t\tGia Thue" << endl;
 			cntphongtrong(root, cnt);
 			if (cnt == 0) break;
-			cout << "Nhap id phong moi: ";
+			cout << "Nhap id Phong: ";
 			string id;
 			cin >> id;
-			DeleteNodePt(root, id);
-			ThemPhongMoichokhachInFile(root,id);
+			DeleteNodePt(root, "id"+id);
+			ThemPhongMoichokhachInFile(root, id);
+			
 		}
 		break;
 	}
@@ -252,9 +273,12 @@ LOOP:
 		string Id;
 		cout << "Nhap so phong can xoa: ";
 		cin >> Id;
-		Id = "id" + Id;
-		root = DeleteNodePt(root, Id);
-		removeLineFromFile(Filephongtro, Id);
+		if (SearchNodePt(root, Id) == NULL) {
+			cout << "Phong khong ton tai!" << endl;
+			break;
+		}
+		DeleteNodePt(root, "id" + Id);
+		removeLineFromFile(Filephongtro, "id"+Id);
 		break;
 	}
 	case 3: {
@@ -262,7 +286,6 @@ LOOP:
 		string Id;
 		cout << "Nhap so phong can tim: ";
 		cin >> Id;
-		Id = "id" + Id;
 		system("cls");
 		rootPhongtro* result = SearchNodePt(root, Id);
 		if (result != nullptr) {
@@ -287,8 +310,7 @@ LOOP:
 		Timkiemmax(root);
 		break;
 	}case 6: {
-		cout << "Cam on ban da su dung phan mem!" << endl;
-		break;
+		return;
 	}
 	default:
 	{

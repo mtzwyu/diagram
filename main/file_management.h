@@ -3,6 +3,8 @@
 #include <fstream>  
 #include <string>  
 #include <map>
+#include <vector>
+#include <algorithm>
 using namespace std;
 
 ifstream chidocfile(string );  

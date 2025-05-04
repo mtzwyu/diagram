@@ -1,10 +1,12 @@
 ﻿#include "file_management.h"
+#include "Phongtro.h"
+#include "Hoadon.h"
 using namespace std;
 #define FileNguoiThue "Resource FIles/Lessee.txt"
 
 
 struct NguoiThue {
-	long long maKhachHang;
+	int maKhachHang;
 	long long CCCD;
 	string Name;
 	int age;
@@ -67,6 +69,7 @@ RootNguoiThue* ThemDanhSachNguoiThuetufile() {
 		file.ignore();
 		getline(file, nguoiThue.NgayThue, '|');
 		file >> nguoiThue.TienCoc;
+		file.ignore();
 		root = InsertNode(root, nguoiThue);
 	}
 	file.close();
@@ -74,7 +77,7 @@ RootNguoiThue* ThemDanhSachNguoiThuetufile() {
 }
 
 // check trong file neu da co MakhachHang roi thi random lai
-bool checkMakhachhang(long long maKhachHang) {
+bool checkMakhachhang(int maKhachHang) {
 	ifstream file(FileNguoiThue);
 	NguoiThue nguoiThue;
 	while (file >> nguoiThue.maKhachHang) {
@@ -138,13 +141,13 @@ void InOrder(RootNguoiThue* root) {
     }
     if (root != nullptr) {
         InOrder(root->Left);
-        cout << root->data.maKhachHang << "\t\t\t" << root->data.CCCD << "\t\t" << root->data.Name << "\t\t" << root->data.age << "\t\t" << root->data.IDPhong <<"\t\t" << "0" << +root->data.SDT << "\t\t" << root->data.NgayThue << "\t\t" << root->data.TienCoc << "d" << endl;
+        cout << root->data.maKhachHang << "\t\t\t" << root->data.CCCD << "\t\t" << root->data.Name << "\t\t" << root->data.age << "\t\t" << root->data.IDPhong <<"\t\t" << "0" << root->data.SDT << "\t" << root->data.NgayThue + "        " << root->data.TienCoc << "d" << endl;
         InOrder(root->Right);
     }
 }
 
 // tìm kiếm người thuê theo Ma khach hang
-RootNguoiThue* SearchByMKH(RootNguoiThue* root, long long Makhachhang) {
+RootNguoiThue* SearchByMKH(RootNguoiThue* root, int Makhachhang) {
 	if (root == nullptr || root->data.maKhachHang == Makhachhang) {
 		return root;
 	}
@@ -154,7 +157,7 @@ RootNguoiThue* SearchByMKH(RootNguoiThue* root, long long Makhachhang) {
 	return SearchByMKH(root->Right, Makhachhang);
 }
 // Hàm này sẽ xóa một node trong cây nhị phân bằng MAKHACHHANG
-RootNguoiThue* DeleteNode(RootNguoiThue* root, long long Makhachhang) {
+RootNguoiThue* DeleteNode(RootNguoiThue* root, int Makhachhang) {
 	if (root == nullptr) {
 		return root;
 	}
@@ -185,7 +188,7 @@ RootNguoiThue* DeleteNode(RootNguoiThue* root, long long Makhachhang) {
 	return root;
 }
 // Hàm Xóa Dữ liệu trong file và trong cây khi tìm kiếm được Makhachhang
-void DeleteDataInFile(long long Makhachhang) {
+void DeleteDataInFile(int Makhachhang) {
 	ifstream file(FileNguoiThue);
 	ofstream tempFile("temp.txt");
 	ofstream file1("resouce files\old_lessee.txt");
@@ -216,7 +219,16 @@ void DeleteDataInFile(long long Makhachhang) {
 	rename("temp.txt", FileNguoiThue);
 }
 
+void LayThongTin(NguoiThue &a,int Makhachhang) {
+	RootNguoiThue* root = ThemDanhSachNguoiThuetufile();
+	if (SearchByMKH(root, Makhachhang) == NULL) {
+		cout << "Khong Tim Thay!" << endl;
+		a.maKhachHang = -1;
+		return;
+	}
+	a = SearchByMKH(root, Makhachhang)->data;
 
+}
 
 
 
@@ -225,13 +237,12 @@ void DeleteDataInFile(long long Makhachhang) {
 void MenuforLessee() {
 LOOP:
 	RootNguoiThue* root = ThemDanhSachNguoiThuetufile();
-
 	cout << "====================QUAN LY NGUOI THUE====================" << endl;
 	cout << "- 1. Them nguoi thue" << endl;
 	cout << "- 2. Xoa Nguoi Da Tra Phong" << endl;
 	cout << "- 3. Tim kiem nguoi thue bang Ma Khach Hang" << endl;
 	cout << "- 4. Hien thi danh sach tat ca nguoi da thue" << endl;
-	cout << "- 5. Thoat" << endl;
+	cout << "- 5. Quay Lai" << endl;
 	cout << "- Nhap lua chon: ";
 	
 	int choice;
@@ -247,7 +258,7 @@ LOOP:
 	}
 	case 2: {
 		system("cls");
-		long long MakhachHang;
+		int MakhachHang;
 		cout << "Nhap Ma Khach Hang can xoa: ";
 		cin >> MakhachHang;
 		RootNguoiThue* result = SearchByMKH(root, MakhachHang);
@@ -262,7 +273,7 @@ LOOP:
 	case 3:
 	{	
 		system("cls");
-		long long MKH;
+		int MKH;
 		cout << "Nhap Ma Khach Hang can tim: ";
 		cin >> MKH;
 		system("cls");
@@ -270,7 +281,7 @@ LOOP:
 		if (result != nullptr) {
 			cout << "--------------------------------------------Nguoi thue co Ma khach hang " << MKH << " da ton tai!----------------------------------------------------" << endl;
 			cout << "Ma Khach Hang\t\tCCCD\t\t\tHo Ten\t\t\tTuoi\t\tID Phong\tSDT\t\tNgay Thue\tTien Coc" << endl;
-			cout << result->data.maKhachHang << "\t\t\t" << result->data.CCCD << "\t\t" << result->data.Name << "\t\t" << result->data.age << "\t\t" << result->data.IDPhong << "\t\t" << "0" << +result->data.SDT << "\t\t" << result->data.NgayThue << "\t\t" << result->data.TienCoc << "d" << endl;
+			cout << result->data.maKhachHang << "\t\t\t" << result->data.CCCD << "\t\t" << result->data.Name << "\t\t" << result->data.age << "\t\t" << result->data.IDPhong << "\t\t" << "0" << +result->data.SDT << "\t" << result->data.NgayThue << "        " << result->data.TienCoc << "d" << endl;
 		}
 		else {
 			cout << "Khong tim thay nguoi thue co ma khach hang " << MKH << endl;
@@ -286,7 +297,6 @@ LOOP:
 		break;
 	}
 	case 5:
-		cout << "--------------Cam on ban da su dung chuong trinh!-----------------------" << endl;
 		return;
 	default:
 		cout << "Lua chon khong hop le!" << endl;

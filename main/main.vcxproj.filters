@@ -44,6 +44,9 @@
     <ClInclude Include="Phongtro.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Hoadon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="sou\Lessee.txt">
