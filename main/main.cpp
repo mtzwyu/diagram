@@ -84,6 +84,7 @@ bool isDateInRange(const string& dateStr, const string& startDateStr, const stri
 }
 
 void Menu() {
+    h:
     ifstream inputFile("Resource FIles/Room.txt");
     vector<Phongtro> bookings;
 
@@ -122,6 +123,7 @@ void Menu() {
     cout << "- 3. Theo quy" << endl;
     cout << "- 4. Theo nam" << endl;
     cout << "- 5. Theo khoang thoi gian tuy chon" << endl;
+    cout << "- 6. Quay Lai" << endl;
     cout << "- Lua chon cua ban: ";
 
     int choice;
@@ -168,7 +170,8 @@ void Menu() {
         break;
     }
 
-    case 5: cout << "Nhap ngay bat dau (d/m/yyyy): ";
+    case 5: {
+        cout << "Nhap ngay bat dau (d/m/yyyy): ";
         cin >> startDate;
         cout << "Nhap ngay ket thuc (d/m/yyyy): ";
         cin >> endDate;
@@ -188,7 +191,18 @@ void Menu() {
         cout << "Tong Doang Thu: " << fixed << setprecision(2) << total << "d" << endl;
         cout << "----------------------------------------" << endl;
         break;
+        goto h;
     }
+    case 6:
+        return;
+    default:
+        cout << "Ban da nhap sai\n";
+        break;
+        goto h;
+ 
+    }
+    
+    
 
     // Hiển thị kết quả
     cout << "\nKet qua thong ke:" << endl;
@@ -199,7 +213,9 @@ void Menu() {
     for (const auto& entry : revenue) {
         cout << left << setw(20) << entry.first << setw(15) << fixed << setprecision(2) << entry.second << endl;
     }
-
+    system("pause");
+    system("cls");
+    goto h;
     return ;
 }
 
