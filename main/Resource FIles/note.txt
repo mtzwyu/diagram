@@ -1,1 +1,3 @@
-
+Định dạng của Lessee.txt # Dữ liệu người thuê (Mã khách hàng|CCCD|Name khách hàng|Tuổi|ID phòng ở|SDT|Ngày thuê phòng|Tiền cọc)
+Định dạng Room.txt  # Dữ liệu phòng (ID Phòng|Số người|Ngày thuê|Giá thuê)
+Định dạng Bill.txt # Dữ liệu Bill (Mã Bill|Mã khách hàng|Name khách hàng|ID phòng|Tiền điện|Tiền Nước|Tiền phòng|Tổng tiền|Trạng thái|Ngày thanh toán)
