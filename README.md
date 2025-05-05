@@ -7,10 +7,10 @@
 Hệ thống quản lý phòng trọ với đầy đủ chức năng: từ quản lý người thuê, phòng trọ đến thống kê doanh thu tự động.
 
 ## 📌 Tính năng chính
+- **Quản lý người thuê**: Thêm/xóa người thuê
 - **Quản lý phòng trọ**: Thêm/xóa/sửa phòng, kiểm tra trạng thái
-- **Quản lý người thuê**: Kết nối người thuê với phòng
-- **Hóa đơn**: Tự động tính tiền theo ngày
-- **Thống kê**: Doanh thu theo ngày/tháng/quý/năm
+- **Quản lý Hóa đơn**: Thêm/xóa hóa đơn, sắp xếp hóa đơn theo yêu cầu
+- **Thống kê**: Doanh thu theo ngày/tháng/quý/năm, chi tiết từ ngày đến ngày
 
 ## 📂 Cấu trúc file
 
