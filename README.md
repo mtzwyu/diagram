@@ -32,15 +32,22 @@ main/
 ```bash
 g++ main.cpp NguoiThue.cpp PhongTro.cpp Hoadon.cpp -o main
 ```
+2. Chạy chương trình:
+
+```bash
+./main
+```
 
 📊 Menu chính
 
+```plaplaintext
 1. Quản lý người thuê
 2. Quản lý phòng trọ
 3. Hóa đơn
 4. Thống kê doanh thu
 5. Thêm người thuê mới
 6. Thoát
+```
 
 📌 Lưu ý quan trọng
 1. Chương trình sử dụng cây nhị phân (BST) để quản lý người thuê
