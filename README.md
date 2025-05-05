@@ -56,4 +56,4 @@ g++ main.cpp NguoiThue.cpp PhongTro.cpp Hoadon.cpp -o main
 
 3. Hỗ trợ kiểm tra ngày tháng hợp lệ (bao gồm năm nhuận)
 
-✉️ Liên hệ: [Mạnh Trường] - mtruong2509@gmail.com
+✉️ Liên hệ: [Mạnh Trường] - mtruong2509@gmail.com and [Trường Đại Học Công Thương] - https://fit.huit.edu.vn/
